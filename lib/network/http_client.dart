@@ -5,13 +5,14 @@ import 'dart:io';
 import 'http_exceptions.dart';
 
 class HttpClient {
-  String baseUrl = 'http://www.boredapi.com/api/';
+  String baseUrl = 'http://10.234.75.203:3005/';
 
   // http get
   Future get(String endpoint) async {
     try {
       final response = await http.get(Uri.parse(baseUrl + endpoint));
       if (response.statusCode == 200) {
+        print(response.body);
         Map<String, dynamic> json = jsonDecode(response.body);
 
         return json;
