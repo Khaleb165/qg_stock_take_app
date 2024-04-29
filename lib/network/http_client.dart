@@ -29,19 +29,25 @@ class HttpClient {
   }
 
   // http post
-  Future post(Map<String, dynamic> body) async {
+  Future post(String endPoint, [Map<String, dynamic>? body]) async {
     try {
       final response = await http.post(
-        Uri.parse(baseUrl),
+        Uri.parse(baseUrl + endPoint),
         body: body,
       );
+      // print(baseUrl + endPoint);
+      //   print(response.body);
+      // print(response.statusCode);
 
       if (response.statusCode == 201) {
-        Map<String, dynamic> json = jsonDecode(response.body);
+        Map<String, dynamic> json = response.body.isEmpty
+            ? {}
+            : jsonDecode(response.body) as Map<String, dynamic>;
+        print('the response is $json');
 
         return json;
       } else {
-        throw Exception('Error in posting response');
+        throw Exception(response.body);
       }
     } on SocketException {
       throw const NetworkException("No internet connection!");
@@ -74,4 +80,19 @@ class HttpClient {
       rethrow;
     }
   }
+
+//   import 'dart:convert';
+// import 'package:http/http.dart' as http;
+
+// Future get(String endpoint, [Map<String, String>? queryParameters, String token = '']) async {
+//   Uri uri = Uri.https('your-base-url.com', endpoint, queryParameters);
+//   http.Response response;
+
+//   try {
+//     response = await http.get(uri, headers: {'Authorization': 'Bearer $token'});
+//     return jsonDecode(response.body);
+//   } catch (e) {
+//     throw ('Error: $e');
+//   }
+// }
 }
