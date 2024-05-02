@@ -8,12 +8,19 @@ class HttpClient {
   String baseUrl = 'http://10.234.75.203:3005/';
 
   // http get
-  Future get(String endpoint) async {
+  Future get(String endpoint, {String token = ''}) async {
     try {
-      final response = await http.get(Uri.parse(baseUrl + endpoint));
+      final response = await http.get(
+          Uri.parse(
+            baseUrl + endpoint,
+          ),
+          headers: {
+            'Authorization': 'Bearer $token',
+          });
       if (response.statusCode == 200) {
         print(response.body);
-        Map<String, dynamic> json = jsonDecode(response.body);
+        List<dynamic> json =
+            response.body.isEmpty ? {} : jsonDecode(response.body);
 
         return json;
       } else {
@@ -39,15 +46,14 @@ class HttpClient {
       //   print(response.body);
       // print(response.statusCode);
 
-      if (response.statusCode == 201) {
-        Map<String, dynamic> json = response.body.isEmpty
-            ? {}
-            : jsonDecode(response.body) as Map<String, dynamic>;
+      if (response.statusCode == 200) {
+        List<dynamic> json =
+            response.body.isEmpty ? {} : jsonDecode(response.body);
         print('the response is $json');
 
         return json;
       } else {
-        throw Exception(response.body);
+        throw Exception(response);
       }
     } on SocketException {
       throw const NetworkException("No internet connection!");

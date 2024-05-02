@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:qg_stock_take_app/constants/colors.dart';
 import 'package:qg_stock_take_app/constants/size_config.dart';
+import 'package:qg_stock_take_app/providers/login_provider.dart';
 import 'package:qg_stock_take_app/screens/stock_take_details/cash/cash.dart';
 import 'package:qg_stock_take_app/screens/stock_take_details/sales/sales.dart';
 import 'package:qg_stock_take_app/screens/stock_take_details/sales_summary/sales_summary.dart';
 import 'package:qg_stock_take_app/screens/stock_take_details/signed_document/signed_document.dart';
 
 class StockTakeScreen extends StatelessWidget {
-  const StockTakeScreen({super.key});
+  final int index;
+  const StockTakeScreen({super.key, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +18,8 @@ class StockTakeScreen extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: primaryColor,
-        title: const Text('Kasoa Akweley F/S 2.0v'),
+        title: Text(
+            '${context.read<LoginProvider>().stations[index].name ?? ''} 1.0v'),
         actions: [
           PopupMenuButton(
             color: Colors.black87,
