@@ -2,22 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:qg_stock_take_app/models/login_model.dart';
 import 'package:qg_stock_take_app/models/station.dart';
 import 'package:qg_stock_take_app/network/http_client.dart';
-import 'package:qg_stock_take_app/network/token_manager.dart';
+import 'package:qg_stock_take_app/offline/prefs_manager.dart';
 import 'package:qg_stock_take_app/util/query_util.dart';
 
 class LoginProvider extends ChangeNotifier {
-  bool _isLoggedIn = false;
-
-  bool get isLoggedIn => _isLoggedIn;
-  String generatedToken = '';
-
   Future<void> login(String phoneNumber, String stationCode) async {
     final HttpClient httpClient = HttpClient();
-    generatedToken = TokenManager(phoneNumber, stationCode).token;
+
     try {
       LoginModel credentials =
           LoginModel(phoneNumber: phoneNumber, stationCode: stationCode);
       String loginEndpoint = 'rpc/stock_authuser';
+      // print('the credentials are $phoneNumber and $stationCode');
+
       final response = await httpClient.post(
         loginEndpoint,
         credentials.toJson(),
@@ -26,9 +23,12 @@ class LoginProvider extends ChangeNotifier {
       // Extract the name from the response
 
       if (response != null && response.isNotEmpty) {
-        String name = response[0]['name'];
-        debugPrint('the name is ----- $name');
-        _isLoggedIn = true;
+        String teamName = response[0]['name'];
+        // debugPrint('the name is ----- $teamName');
+
+        await PrefsManager.setTeamName(teamName);
+        await PrefsManager.setIsLoggedIn(true);
+        notifyListeners();
       } else {
         throw Exception('Error in getting response');
       }
@@ -38,8 +38,8 @@ class LoginProvider extends ChangeNotifier {
     }
   }
 
-  void logout() {
-    _isLoggedIn = false;
+  Future<void> logout() async {
+    await PrefsManager.clearPrefs();
     notifyListeners();
   }
 
@@ -53,7 +53,8 @@ class LoginProvider extends ChangeNotifier {
     final HttpClient httpClient = HttpClient();
     try {
       String stationEndpoint = QueryUtils.getStations();
-      String token = generatedToken;
+      String token = PrefsManager.getToken();
+      // print('the token from getToken is $token');
       final response = await httpClient.get(stationEndpoint, token: token);
       if (response.isNotEmpty) {
         List<Station> stations =
