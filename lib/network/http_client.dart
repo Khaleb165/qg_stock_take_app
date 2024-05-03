@@ -86,19 +86,4 @@ class HttpClient {
       rethrow;
     }
   }
-
-//   import 'dart:convert';
-// import 'package:http/http.dart' as http;
-
-// Future get(String endpoint, [Map<String, String>? queryParameters, String token = '']) async {
-//   Uri uri = Uri.https('your-base-url.com', endpoint, queryParameters);
-//   http.Response response;
-
-//   try {
-//     response = await http.get(uri, headers: {'Authorization': 'Bearer $token'});
-//     return jsonDecode(response.body);
-//   } catch (e) {
-//     throw ('Error: $e');
-//   }
-// }
 }
