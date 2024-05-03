@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:qg_stock_take_app/constants/colors.dart';
 import 'package:qg_stock_take_app/constants/size_config.dart';
 import 'package:qg_stock_take_app/providers/login_provider.dart';
+import 'package:qg_stock_take_app/screens/login.dart';
 import 'package:qg_stock_take_app/screens/stock_take_details/cash/cash.dart';
 import 'package:qg_stock_take_app/screens/stock_take_details/sales/sales.dart';
 import 'package:qg_stock_take_app/screens/stock_take_details/sales_summary/sales_summary.dart';
@@ -44,7 +45,15 @@ class StockTakeScreen extends StatelessWidget {
               ),
               PopupMenuItem(
                 child: GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    context.read<LoginProvider>().logout();
+                    debugPrint('logged out');
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const LoginScreen()),
+                        (route) => false);
+                  },
                   child: Text(
                     'Logout',
                     style: TextStyle(color: colorWhite),
