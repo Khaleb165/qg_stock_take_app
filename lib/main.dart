@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qg_stock_take_app/offline/prefs_manager.dart';
 import 'package:qg_stock_take_app/screens/login.dart';
+import 'package:qg_stock_take_app/screens/select_station.dart';
 import 'package:qg_stock_take_app/util/database_util.dart';
 
 import 'constants/colors.dart';
@@ -9,6 +11,7 @@ import 'providers/login_provider.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DatabaseUtil().initDatabase();
+  await PrefsManager().init();
 
   runApp(const StockTakeApp());
 }
@@ -35,7 +38,9 @@ class StockTakeApp extends StatelessWidget {
               indicatorColor: colorYellow,
               unselectedLabelColor: colorWhite,
             )),
-        home: const LoginScreen(),
+        home: PrefsManager.isLogIn()
+            ? const SelectStation()
+            : const LoginScreen(),
       ),
     );
   }
