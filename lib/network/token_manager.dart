@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:qg_stock_take_app/offline/prefs_manager.dart';
 
 class TokenManager {
   final String _phoneNumber;
@@ -8,10 +9,13 @@ class TokenManager {
   late Timer _timer;
 
   TokenManager(this._phoneNumber, this._stationCode);
-  String _token = '';
+  String _token = PrefsManager.getToken();
 
   String get token => _token;
   static const String _baseUrl = 'http://10.234.75.203:3005';
+
+  // String phoneNumber = PrefsManager.getStationPhone();
+  // String stationCode = PrefsManager.getStationCode();
 
   Future<void> initialize() async {
     // Generate initial token
@@ -32,6 +36,8 @@ class TokenManager {
     );
     if (response.statusCode == 200) {
       _token = jsonDecode(response.body)[0]['token'];
+      print('token generated successfully: $_token');
+      await PrefsManager.setToken(_token);
     } else {
       throw Exception('Failed to generate token: ${response.body}');
     }
