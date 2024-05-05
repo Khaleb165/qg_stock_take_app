@@ -14,6 +14,8 @@ class LoginProvider extends ChangeNotifier {
           LoginModel(phoneNumber: phoneNumber, stationCode: stationCode);
       String loginEndpoint = 'rpc/stock_authuser';
       // print('the credentials are $phoneNumber and $stationCode');
+      await PrefsManager.setStationCode(stationCode);
+      await PrefsManager.setStationPhone(phoneNumber);
 
       final response = await httpClient.post(
         loginEndpoint,
@@ -24,7 +26,7 @@ class LoginProvider extends ChangeNotifier {
 
       if (response != null && response.isNotEmpty) {
         String teamName = response[0]['name'];
-        // debugPrint('the name is ----- $teamName');
+        debugPrint('the name is ----- $teamName');
 
         await PrefsManager.setTeamName(teamName);
         await PrefsManager.setIsLoggedIn(true);
@@ -60,6 +62,11 @@ class LoginProvider extends ChangeNotifier {
         List<Station> stations =
             response.map<Station>((json) => Station.fromJson(json)).toList();
         _stations.addAll(stations);
+        // print('the stations are $response');
+        // String stationId = response['id'];
+        // debugPrint('the station id is ----- $stationId');
+
+        // await PrefsManager.setStationId(stationId);
         notifyListeners();
       } else {
         throw Exception(response);
