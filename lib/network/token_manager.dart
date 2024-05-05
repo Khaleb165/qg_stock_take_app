@@ -13,15 +13,20 @@ class TokenManager {
 
   String get token => _token;
   static const String _baseUrl = 'http://10.234.75.203:3005';
+  bool isLogin = PrefsManager.isLogIn();
 
   // String phoneNumber = PrefsManager.getStationPhone();
   // String stationCode = PrefsManager.getStationCode();
 
   Future<void> initialize() async {
-    // Generate initial token
-    await _generateToken();
+    // check if islogin is true before you generate token, else don't generate token
+    if (isLogin) {
+      await _generateToken();
+    } else {
+      print('User is not logged in');
+    }
     // Start timer to refresh token periodically
-    _timer = Timer.periodic(const Duration(minutes: 30), (timer) async {
+    _timer = Timer.periodic(const Duration(minutes: 15), (timer) async {
       await _generateToken();
     });
   }
@@ -43,23 +48,9 @@ class TokenManager {
     }
   }
 
-  // Future<void> _refreshTokenIfNeeded() async {
-  //   final response = await http.get(
-  //     Uri.parse('$_baseUrl/verify-token'),
-  //     headers: {
-  //       'Authorization': 'Bearer $_token',
-  //     },
-  //   );
-  //   if (response.statusCode == 200) {
-  //     // Token is valid, no action needed
-  //     return;
-  //   } else if (response.statusCode == 401 && response.body == "JWT expired") {
-  //     // Token expired, generate new token
-  //     await _generateToken();
-  //   } else {
-  //     throw Exception('Failed to verify token: ${response.body}');
-  //   }
-  // }
+  Future<void> get refreshToken async {
+    await _generateToken();
+  }
 
   void dispose() {
     _timer.cancel();
