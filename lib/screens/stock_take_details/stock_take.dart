@@ -3,15 +3,41 @@ import 'package:provider/provider.dart';
 import 'package:qg_stock_take_app/constants/colors.dart';
 import 'package:qg_stock_take_app/constants/size_config.dart';
 import 'package:qg_stock_take_app/providers/login_provider.dart';
+import 'package:qg_stock_take_app/providers/reports_provider.dart';
 import 'package:qg_stock_take_app/screens/login.dart';
 import 'package:qg_stock_take_app/screens/stock_take_details/cash/cash.dart';
 import 'package:qg_stock_take_app/screens/stock_take_details/sales/sales.dart';
 import 'package:qg_stock_take_app/screens/stock_take_details/sales_summary/sales_summary.dart';
 import 'package:qg_stock_take_app/screens/stock_take_details/signed_document/signed_document.dart';
 
-class StockTakeScreen extends StatelessWidget {
+class StockTakeScreen extends StatefulWidget {
   final int index;
   const StockTakeScreen({super.key, required this.index});
+
+  @override
+  State<StockTakeScreen> createState() => _StockTakeScreenState();
+}
+
+class _StockTakeScreenState extends State<StockTakeScreen> {
+// get staion reports
+  Future<void> getReports() async {
+    try {
+      await context.read<ReportsProvider>().getReports();
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('$error'),
+          backgroundColor: primaryColor,
+        ),
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    getReports();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +46,7 @@ class StockTakeScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         backgroundColor: primaryColor,
         title: Text(
-            '${context.read<LoginProvider>().stations[index].name ?? ''} 1.0v'),
+            '${context.read<LoginProvider>().stations[widget.index].name ?? ''} 1.0v'),
         actions: [
           PopupMenuButton(
             color: Colors.black87,
