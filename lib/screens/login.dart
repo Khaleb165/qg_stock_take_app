@@ -7,7 +7,6 @@ import 'package:qg_stock_take_app/network/token_manager.dart';
 import 'package:qg_stock_take_app/providers/login_provider.dart';
 import 'package:qg_stock_take_app/screens/select_station.dart';
 
-
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -45,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       await context.read<LoginProvider>().login(phoneNumber, stationCode);
-      await tokenManager.initialize();
+      await tokenManager.refreshToken;
 
       // debugPrint('Token generated: ${tokenManager.token}');
       // await PrefsManager.setToken(tokenManager.token);
