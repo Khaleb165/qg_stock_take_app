@@ -16,7 +16,7 @@ class ReportsProvider extends ChangeNotifier {
     final HttpClient httpClient = HttpClient();
     try {
       // todo: get the station id from the prefs
-      String reportEndpoint = QueryUtils.getStationReport(155);
+      String reportEndpoint = QueryUtils.getStationReport(PrefsManager.getStationId());
       String token = PrefsManager.getToken();
       final response = await httpClient.get(reportEndpoint, token: token);
 
