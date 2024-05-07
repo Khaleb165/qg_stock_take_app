@@ -26,7 +26,7 @@ class TokenManager {
       print('User is not logged in');
     }
     // Start timer to refresh token periodically
-    _timer = Timer.periodic(const Duration(minutes: 15), (timer) async {
+    _timer = Timer.periodic(const Duration(minutes: 59), (timer) async {
       await _generateToken();
     });
   }
