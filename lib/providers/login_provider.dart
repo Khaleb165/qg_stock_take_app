@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:qg_stock_take_app/models/login_model.dart';
 import 'package:qg_stock_take_app/models/station.dart';
@@ -6,6 +8,8 @@ import 'package:qg_stock_take_app/offline/prefs_manager.dart';
 import 'package:qg_stock_take_app/util/query_util.dart';
 
 class LoginProvider extends ChangeNotifier {
+  Timer? _inactivityTimer;
+
   Future<void> login(String phoneNumber, String stationCode) async {
     final HttpClient httpClient = HttpClient();
 
@@ -30,6 +34,7 @@ class LoginProvider extends ChangeNotifier {
 
         await PrefsManager.setTeamName(teamName);
         await PrefsManager.setIsLoggedIn(true);
+        resetInactivityTimer();
         notifyListeners();
       } else {
         throw Exception('Error in getting response');
@@ -42,6 +47,9 @@ class LoginProvider extends ChangeNotifier {
 
   Future<void> logout() async {
     await PrefsManager.clearPrefs();
+    _inactivityTimer?.cancel();
+    _inactivityTimer = null;
+    notifyListeners();
     notifyListeners();
   }
 
@@ -75,5 +83,11 @@ class LoginProvider extends ChangeNotifier {
       debugPrint('the error is $error');
       rethrow;
     }
+  }
+
+  // logout after the user has been inactive for an hour
+  void resetInactivityTimer() {
+    _inactivityTimer?.cancel();
+    _inactivityTimer = Timer(const Duration(hours: 1), logout);
   }
 }

@@ -104,20 +104,23 @@ class _SelectStationState extends State<SelectStation> {
                               context.watch<LoginProvider>().stations.length,
                           itemBuilder: (context, index) {
                             final stations =
-                                context.watch<LoginProvider>().stations;
+                                context.watch<LoginProvider>().stations[index];
                             return MaterialButton(
-                              onPressed: () {
+                              onPressed: () async {
+                                await PrefsManager.setStationId(
+                                    stations.id ?? 0);
+                                await PrefsManager.setStationName(
+                                    stations.name ?? '');
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => StockTakeScreen(
-                                              index: index,
-                                            )));
+                                        builder: (context) =>
+                                            const StockTakeScreen()));
                               },
                               color: colorGrey,
                               elevation: 0,
                               child: Text(
-                                stations[index].name ?? '',
+                                stations.name ?? '',
                                 style: TextStyle(color: colorWhite),
                               ),
                             );

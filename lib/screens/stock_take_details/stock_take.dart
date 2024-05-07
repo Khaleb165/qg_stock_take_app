@@ -10,9 +10,10 @@ import 'package:qg_stock_take_app/screens/stock_take_details/sales/sales.dart';
 import 'package:qg_stock_take_app/screens/stock_take_details/sales_summary/sales_summary.dart';
 import 'package:qg_stock_take_app/screens/stock_take_details/signed_document/signed_document.dart';
 
+import '../../offline/prefs_manager.dart';
+
 class StockTakeScreen extends StatefulWidget {
-  final int index;
-  const StockTakeScreen({super.key, required this.index});
+  const StockTakeScreen({super.key});
 
   @override
   State<StockTakeScreen> createState() => _StockTakeScreenState();
@@ -41,12 +42,20 @@ class _StockTakeScreenState extends State<StockTakeScreen> {
 
   @override
   Widget build(BuildContext context) {
+//     final stations = context.read<LoginProvider>().stations[widget.index];
+//     String stationName = stations.name ?? '';
+//     int stationId = stations.id ?? 0;
+// // //  set the station id and name to the prefs
+// //     context.read<ReportsProvider>().setStationId(stationId);
+// //     context.read<ReportsProvider>().setStationName(stationName);
+//     PrefsManager.setStationId(stationId);
+//     PrefsManager.setStationName(stationName);
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: primaryColor,
-        title: Text(
-            '${context.read<LoginProvider>().stations[widget.index].name ?? ''} 1.0v'),
+        title: Text('${PrefsManager.getStationName()} 1.0v'),
         actions: [
           PopupMenuButton(
             color: Colors.black87,

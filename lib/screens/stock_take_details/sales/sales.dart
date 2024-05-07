@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qg_stock_take_app/constants/colors.dart';
 import 'package:qg_stock_take_app/constants/size_config.dart';
+import 'package:qg_stock_take_app/offline/prefs_manager.dart';
 import 'package:qg_stock_take_app/screens/stock_take_details/sales/damsa.dart';
 import 'package:qg_stock_take_app/screens/stock_take_details/sales/nozzle_reports.dart';
 import 'package:qg_stock_take_app/screens/stock_take_details/sales/stock_loss/stock_loss.dart';
@@ -13,7 +14,7 @@ class SalesScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
-        title: const Text('Kasoa Akweley F/S 2.0v'),
+        title: Text('${PrefsManager.getStationName()} 1.0v'),
         actions: [
           IconButton(
             onPressed: () {},

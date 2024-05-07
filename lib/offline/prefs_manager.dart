@@ -16,6 +16,7 @@ class PrefsManager {
   static const String isLoggedIn = 'isLoggedIn';
   static const String teamName = 'team_name';
   static const String stationId = 'station_id';
+  static const String teamStationName = 'team_station_name';
 
   Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
@@ -46,11 +47,11 @@ class PrefsManager {
   }
 
   static Future<void> setTeamName(String name) async {
-    await _prefs?.setString(stationName, name);
+    await _prefs?.setString(teamName, name);
   }
 
   static String getTeamName() {
-    return _prefs?.getString(stationName) ?? '';
+    return _prefs?.getString(teamName) ?? '';
   }
 
   static Future<void> setIsLoggedIn(bool isLogin) async {
@@ -61,12 +62,20 @@ class PrefsManager {
     return _prefs?.getBool(isLoggedIn) ?? false;
   }
 
-  static Future<void> setStationId(String id) async {
-    await _prefs?.setString(stationId, id);
+  static Future<void> setStationId(int id) async {
+    await _prefs?.setInt(stationId, id);
   }
 
-  static String getStationId() {
-    return _prefs?.getString(stationId) ?? '';
+  static int getStationId() {
+    return _prefs?.getInt(stationId) ?? 0;
+  }
+
+  static Future<void> setStationName(String name) async {
+    await _prefs?.setString(stationName, name);
+  }
+
+  static String getStationName() {
+    return _prefs?.getString(stationName) ?? '';
   }
 
   static Future<void> clearPrefs() async {
