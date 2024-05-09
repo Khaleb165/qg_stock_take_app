@@ -1,10 +1,10 @@
-import 'nozzle.dart';
+import 'tank.dart';
 
 class TankGroup {
   int id;
   String name;
   int productId;
-  final List<Nozzle> tank;
+  final List<Tank> tank;
 
   TankGroup({
     required this.id,
@@ -18,7 +18,7 @@ class TankGroup {
       id: json['id'],
       name: json['name'],
       productId: json['product_id'],
-      tank: List<Nozzle>.from(json['tank'].map((x) => Nozzle.fromJson(x))),
+      tank: List<Tank>.from(json['tank'].map((x) => Tank.fromJson(x))),
     );
   }
 
