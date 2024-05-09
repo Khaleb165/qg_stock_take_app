@@ -16,7 +16,8 @@ class ReportsProvider extends ChangeNotifier {
     final HttpClient httpClient = HttpClient();
     try {
       // todo: get the station id from the prefs
-      String reportEndpoint = QueryUtils.getStationReport(PrefsManager.getStationId());
+      String reportEndpoint =
+          QueryUtils.getStationReport(PrefsManager.getStationId());
       String token = PrefsManager.getToken();
       final response = await httpClient.get(reportEndpoint, token: token);
 
@@ -26,6 +27,30 @@ class ReportsProvider extends ChangeNotifier {
           _reports.add(StationReport.fromJson(report));
         }
         print('the reports are $_reports');
+
+        // get date from the response and store it in the prefs
+        print('the date is --------------${response['date']}');
+        PrefsManager.setStationReportDate(response['date']);
+        notifyListeners();
+      } else {
+        throw Exception('Error in getting response');
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  // get the station report details
+  Future<void> getStationReportDetails(int stationId, String date) async {
+    final HttpClient httpClient = HttpClient();
+    try {
+      String reportEndpoint = QueryUtils.getStationDetails(stationId, date);
+      String token = PrefsManager.getToken();
+      final response = await httpClient.get(reportEndpoint, token: token);
+
+      if (response != null && response.isNotEmpty) {
+        print('the station report details are $response');
+
         notifyListeners();
       } else {
         throw Exception('Error in getting response');

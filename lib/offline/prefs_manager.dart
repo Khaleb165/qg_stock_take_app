@@ -17,6 +17,7 @@ class PrefsManager {
   static const String teamName = 'team_name';
   static const String stationId = 'station_id';
   static const String teamStationName = 'team_station_name';
+  static const String stationReportDate = 'station_report_date';
 
   Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
@@ -76,6 +77,14 @@ class PrefsManager {
 
   static String getStationName() {
     return _prefs?.getString(stationName) ?? '';
+  }
+
+  static Future<void> setStationReportDate(String date) async {
+    await _prefs?.setString(stationReportDate, date);
+  }
+
+  static String getStationReportDate() {
+    return _prefs?.getString(stationReportDate) ?? '';
   }
 
   static Future<void> clearPrefs() async {
