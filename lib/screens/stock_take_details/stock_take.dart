@@ -23,8 +23,7 @@ class _StockTakeScreenState extends State<StockTakeScreen> {
 // get staion reports
   Future<void> getReports() async {
     try {
-     await context.read<ReportsProvider>().getReports();
-      // debugPrint('the reports are $reports');
+      await context.read<ReportsProvider>().getReports();
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
